@@ -1,6 +1,9 @@
 #include "estructuras.h"
 
-Matriz* matriz_create(int n,int m);
-void matriz_destroy(Matriz* matriz);
-void matriz_show(Matriz *matriz);  
+Wave* wave_create(int n,int m,int t);
+void wave_destroy(Wave* wave);
+void wave_show(Wave *wave);
+void first(Wave* wave);
+void next(Wave* wave);
+
     

@@ -1,6 +1,7 @@
 
-typedef struct matriz{
-    float **data;
+typedef struct wave{
+    float ***data;
     int row;
     int col;
-}Matriz;
+    int steps;
+}Wave;

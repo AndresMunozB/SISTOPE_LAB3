@@ -4,11 +4,19 @@
 
 
 int main(){
-    Matriz* matriz = NULL;
+    Wave* wave = NULL;
     
-        matriz = matriz_create(10,10);
-        matriz_show(matriz);
-        matriz_destroy(matriz);
+    
+
+    wave = wave_create(10,10,200);
+    wave->data[0][2][2] = 100.0;
+    first(wave);
+    next(wave);
+    wave_show(wave);
+    printf("chao\n");
+    wave_destroy(wave);
+    printf("hola\n");
+    
     
     
 
