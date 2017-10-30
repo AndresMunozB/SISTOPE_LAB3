@@ -114,8 +114,11 @@ Thread_t** threads_init(int n, int m, int hebras){
     int casillas = n*m;
     int i,j;
     int positions;
-    Thread_t** threads = (Thread_t**)malloc(sizeof(Thread_t*)*hebras+1);
     int modulo = casillas%hebras;
+
+    Thread_t** threads = (Thread_t**)malloc(sizeof(Thread_t*)*hebras+1);
+    threads[hebras] = NULL;
+
     if(modulo == 0){
         positions = casillas/hebras;
     }else{
@@ -127,16 +130,21 @@ Thread_t** threads_init(int n, int m, int hebras){
         threads[i]->positions = (Position_t*)malloc(sizeof(Position_t)*positions);
         threads[i]->int_pos = 0;
     }
-    threads[hebras] = NULL;
+
+    
     Position_t pos;
     int counter = 0;
     for(i=0;i<n;i++){
         for(j=0;j<m;j++){
             pos.row = i;
             pos.col = j;
+            //printf("int_pos:%d\n",threads[counter%hebras]->int_pos );
+            printf("threads[%d]->positions[%d] = %d,%d\n",counter%hebras,threads[counter%hebras]->int_pos,pos.row,pos.col );
             threads[counter%hebras]->positions[threads[counter%hebras]->int_pos] = pos;
-            counter++;
+            //printf("modulo%d\n",counter%hebras);
+            //printf("%d,%d\n", pos.row,pos.col);
             threads[counter%hebras]->int_pos++;
+            counter++;
         }
     }
     return threads;

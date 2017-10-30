@@ -25,7 +25,7 @@ int main(){
     printf("hola\n");
     int i;
 
-    Thread_t** hilos = threads_init(4,4,5);
+    Thread_t** hilos = threads_init(4,4,19);
     threads_show(hilos);
     /*for(i=0;i<THREADS;i++){
     	pthread_create(&threads[i],NULL,thread_function,(void*)wave);
