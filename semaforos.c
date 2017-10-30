@@ -6,9 +6,9 @@ pthread_t threads[10];
 sem_t semaphore;
 
 void* function(void* args){
-	sem_wait(&semaphore);
+	sem_trywait(&semaphore);
 	printf("Hola:%li\n",pthread_self());
-	//sem_post(&semaphore);
+	sem_post(&semaphore);
 }
 
 int main(){
