@@ -106,6 +106,6 @@ void calculate(Wave* wave,float pd, int i, int j, int k){
         right = wave->data[0][j][k+1];
         left = wave->data[0][j][k-1];
         before = wave->data[0][j][k];
-        wave->data[1][j][k] = (pd*(up+right+left+down-(4*before)))+before;
+        wave->data[1][j][k] = ((pd/2)*(up+right+left+down-(4*before)))+before;
     }
 }
