@@ -109,3 +109,50 @@ void calculate(Wave* wave,float pd, int i, int j, int k){
         wave->data[1][j][k] = ((pd/2)*(up+right+left+down-(4*before)))+before;
     }
 }
+
+Thread_t** threads_init(int n, int m, int hebras){
+    int casillas = n*m;
+    int i,j;
+    int positions;
+    Thread_t** threads = (Thread_t**)malloc(sizeof(Thread_t*)*hebras+1);
+    int modulo = casillas%hebras;
+    if(modulo == 0){
+        positions = casillas/hebras;
+    }else{
+        positions = (casillas/hebras) + 1;
+    }
+
+    for(i = 0; i < hebras; i++){
+        threads[i] = (Thread_t*)malloc(sizeof(Thread_t));
+        threads[i]->positions = (Position_t*)malloc(sizeof(Position_t)*positions);
+        threads[i]->int_pos = 0;
+    }
+    threads[hebras] = NULL;
+    Position_t pos;
+    int counter = 0;
+    for(i=0;i<n;i++){
+        for(j=0;j<m;j++){
+            pos.row = i;
+            pos.col = j;
+            threads[counter%hebras]->positions[threads[counter%hebras]->int_pos] = pos;
+            counter++;
+            threads[counter%hebras]->int_pos++;
+        }
+    }
+    return threads;
+}
+
+void threads_show(Thread_t** threads){
+    int i = 0; 
+    int j;
+    while(threads[i] != NULL){
+        printf("Hebra %d\n", i);
+        printf("IntPos: %d\n",threads[i]->int_pos);
+        for(j = 0; j < threads[i]->int_pos; j++){
+            printf("%d,%d\n",threads[i]->positions[j].row,threads[i]->positions[j].col);
+        }
+
+        i++;
+        printf("\n");
+    }
+}

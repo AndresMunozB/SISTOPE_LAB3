@@ -12,6 +12,8 @@ void* thread_function(void* args){
 
 	}
 }
+
+
 pthread_t threads[THREADS];
 int main(){
     Wave* wave = NULL;
@@ -22,7 +24,10 @@ int main(){
     //next(wave);
     printf("hola\n");
     int i;
-    for(i=0;i<THREADS;i++){
+
+    Thread_t** hilos = threads_init(4,4,5);
+    threads_show(hilos);
+    /*for(i=0;i<THREADS;i++){
     	pthread_create(&threads[i],NULL,thread_function,(void*)wave);
     }
     for(i=0;i<THREADS;i++){
@@ -32,7 +37,7 @@ int main(){
     //printf("chao\n");
     wave_destroy(wave);
     //printf("hola\n");
-    
+    */
     
     
 
