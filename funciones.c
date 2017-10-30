@@ -134,15 +134,11 @@ Thread_t** threads_init(int n, int m, int hebras){
     
     Position_t pos;
     int counter = 0;
-    for(i=0;i<n;i++){
-        for(j=0;j<m;j++){
+    for(i=1;i<n-1;i++){
+        for(j=1;j<m-1;j++){
             pos.row = i;
             pos.col = j;
-            //printf("int_pos:%d\n",threads[counter%hebras]->int_pos );
-            printf("threads[%d]->positions[%d] = %d,%d\n",counter%hebras,threads[counter%hebras]->int_pos,pos.row,pos.col );
             threads[counter%hebras]->positions[threads[counter%hebras]->int_pos] = pos;
-            //printf("modulo%d\n",counter%hebras);
-            //printf("%d,%d\n", pos.row,pos.col);
             threads[counter%hebras]->int_pos++;
             counter++;
         }
