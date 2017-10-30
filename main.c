@@ -3,41 +3,30 @@
 #include "funciones.h"
 
 #define THREADS 2
-void* thread_function(void* args){
-	Wave* wave = (Wave*)args;
-	int i,j,k;
-	for(i=0;i<wave->steps;i++){
-		printf("id:%li,step:%d\n",pthread_self(),i);
-		pthread_barrier_wait(&wave->barriers[i]);
+#define N 10
+#define M 10
+#define T 10
+#define NP 4
+#define MP 4
 
-	}
-}
+Thread_t** threads = NULL;
+int* threads_id = NULL;
+Wave* wave = NULL;
 
 
-pthread_t threads[THREADS];
+
+
 int main(){
-    Wave* wave = NULL;
     
     
-    wave = wave_create(10,10,10,THREADS);
-    wave->data[0][2][2] = 100.0;
-    //next(wave);
-    printf("hola\n");
+    
+    wave = wave_create(N,M,T,THREADS);
+    wave->data[0][NP][MP] = 100.0;
     int i;
 
-    Thread_t** hilos = threads_init(4,4,19);
-    threads_show(hilos);
-    /*for(i=0;i<THREADS;i++){
-    	pthread_create(&threads[i],NULL,thread_function,(void*)wave);
-    }
-    for(i=0;i<THREADS;i++){
-    	pthread_join(threads[i],NULL);
-    }
-    //wave_show(wave);
-    //printf("chao\n");
-    wave_destroy(wave);
-    //printf("hola\n");
-    */
+    threads = threads_init(N,M,THREADS);
+    threads_show(threads);
+    
     
     
 
