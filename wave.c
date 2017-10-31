@@ -31,6 +31,7 @@ void* function(void* id_ptr){
         }
       	pthread_barrier_wait(&wave->barriers[i]);
     }
+    pthread_exit (NULL);
 }
 
 int main(){
@@ -79,7 +80,7 @@ int main(){
     //FIN LIBERAR MEMORIA
 
 
-    
+
     //SECUENCIAL
     /*wave = wave_create(N,M,T,THREADS);
     wave->data[0][NP][MP] = 100.0;

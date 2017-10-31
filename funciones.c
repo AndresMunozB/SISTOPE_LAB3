@@ -66,49 +66,6 @@ void wave_show(Wave *wave){
     }
 }
 
-void next(Wave* wave){
-    int i,j,k;
-    float up,down,right,left,before,before2,c,dt,dd,pd;
-    c = 1.0;
-    dt = 0.1;
-    dd = 2.0;
-    pd = ((c*c))*((dt/dd)*(dt/dd));
-
-    for ( i = 1; i < wave->steps; i++){
-        for ( j = 1; j < wave->row-1; j++){
-            for( k = 1; k < wave->col-1;k++){
-                calculate(wave,pd,i,j,k);
-            }
-
-        }
-    }
-}
-
-
-
-void calculate(Wave* wave,float pd, int i, int j, int k){
-
-    float up,down,right,left,before,before2;
-
-    if(i>1){
-    
-        up = wave->data[i-1][j-1][k];
-        down = wave->data[i-1][j+1][k];
-        right = wave->data[i-1][j][k+1];
-        left = wave->data[i-1][j][k-1];
-        before = wave->data[i-1][j][k];
-        before2 = wave->data[i-2][j][k];
-        wave->data[i][j][k] = (pd*(up+right+left+down+before-(4*before)))+(2*before)-before2;
-    }
-    else if(i==1){
-        up = wave->data[0][j-1][k];
-        down = wave->data[0][j+1][k];
-        right = wave->data[0][j][k+1];
-        left = wave->data[0][j][k-1];
-        before = wave->data[0][j][k];
-        wave->data[1][j][k] = ((pd/2)*(up+right+left+down-(4*before)))+before;
-    }
-}
 
 Thread_t** threads_init(int n, int m, int int_threads){
     int casillas = n*m;
@@ -160,12 +117,56 @@ void threads_show(Thread_t** threads){
     int j;
     while(threads[i] != NULL){
         printf("Hebra %d\n", i);
-        printf("IntPos: %d\n",threads[i]->int_pos);
+        printf("int_pos: %d\n",threads[i]->int_pos);
         for(j = 0; j < threads[i]->int_pos; j++){
             printf("%d,%d\n",threads[i]->positions[j].row,threads[i]->positions[j].col);
         }
 
         i++;
         printf("\n");
+    }
+}
+
+void secuencial(Wave* wave){
+    int i,j,k;
+    float c,dt,dd,pd;
+    c = 1.0;
+    dt = 0.1;
+    dd = 2.0;
+    pd = ((c*c))*((dt/dd)*(dt/dd));
+
+    for ( i = 1; i < wave->steps; i++){
+        for ( j = 1; j < wave->row-1; j++){
+            for( k = 1; k < wave->col-1;k++){
+                calculate(wave,pd,i,j,k);
+            }
+
+        }
+    }
+}
+
+
+
+void calculate(Wave* wave,float pd, int i, int j, int k){
+
+    float up,down,right,left,before,before2;
+
+    if(i>1){
+    
+        up = wave->data[i-1][j-1][k];
+        down = wave->data[i-1][j+1][k];
+        right = wave->data[i-1][j][k+1];
+        left = wave->data[i-1][j][k-1];
+        before = wave->data[i-1][j][k];
+        before2 = wave->data[i-2][j][k];
+        wave->data[i][j][k] = (pd*(up+right+left+down+before-(4*before)))+(2*before)-before2;
+    }
+    else if(i==1){
+        up = wave->data[0][j-1][k];
+        down = wave->data[0][j+1][k];
+        right = wave->data[0][j][k+1];
+        left = wave->data[0][j][k-1];
+        before = wave->data[0][j][k];
+        wave->data[1][j][k] = ((pd/2)*(up+right+left+down-(4*before)))+before;
     }
 }
