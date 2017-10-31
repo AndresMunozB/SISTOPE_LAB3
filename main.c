@@ -9,70 +9,84 @@
 #define NP 2
 #define MP 2
 
+
+//VARIABLES GLOBALES
 Thread_t** threads = NULL;
 int* threads_id = NULL;
 Wave* wave = NULL;
 float pd;
 pthread_mutex_t mutex;
+//FIN VARIABLES GLOBALES
+
 
 void* function(void* id_ptr){
-    
     int thread_id = *(int*)id_ptr;
     int i,j;
     int row,col;
     for(i=1;i<wave->steps;i++){
-        //pthread_mutex_lock(&mutex);
-        //printf("thread:%d,step:%d,pd:%09.4f \n",thread_id,i,pd);
-
         for(j=0;j<threads[thread_id]->int_pos;j++){
             row = threads[thread_id]->positions[j].row;
             col = threads[thread_id]->positions[j].col;
-            //printf("pos: %d,%d\n",row,col );
             calculate(wave,pd,i,row,col);
         }
-        //pthread_mutex_unlock(&mutex);
       	pthread_barrier_wait(&wave->barriers[i]);
     }
-
 }
 
 int main(){
     
-    
-    //pthread_mutex_init(&mutex,NULL);
-    
+    //VALIDAR ENTRADA
+
+    //FIN VALIDAR ENTRADA
+
+
+    //PEDIR MEMORIA
     wave = wave_create(N,M,T,THREADS);
-    wave->data[0][NP][MP] = 100.0;
-    threads_id = (int*) malloc(sizeof(int)*THREADS);
     threads = threads_init(N,M,THREADS);
+    threads_id = (int*) malloc(sizeof(int)*THREADS);
+    //FIN PEDIR MEMORIA
+
+
+    //PROCESAR INFORMACION
     threads_show(threads);
+    wave->data[0][NP][MP] = 100.0;
+    int i;
     float c,dt,dd;
     c = 1.0;
     dt = 0.1;
     dd = 2.0;
     pd = ((c*c))*((dt/dd)*(dt/dd));
-    //printf("pd:%09.4f \n",pd);
 
-    int i;
+    //INCIAR THREADS
     for(i=0;i<THREADS;i++){
         threads_id[i]=i;
         pthread_create(&threads[i]->thread,NULL,function,(void*)&threads_id[i]);
     }
+    //FIN INICIAR THREADS
+
+    //ESPERAR THREADS
     for(i=0;i<THREADS;i++){
         pthread_join(threads[i]->thread,NULL);
     }
-    threads_destroy(threads,THREADS);
     wave_show(wave);
-    wave_destroy(wave);
-    free(threads_id);
+    //FIN ESPERAR THREADS
+    //FIN PROCESAR INFORMACION
 
-    //secuencial 
+    //LIBERAR MEMORIA
+    wave_destroy(wave);
+    threads_destroy(threads,THREADS);
+    free(threads_id);
+    //FIN LIBERAR MEMORIA
+
+
+    
+    //SECUENCIAL
     /*wave = wave_create(N,M,T,THREADS);
     wave->data[0][NP][MP] = 100.0;
     next(wave);
     wave_show(wave);
     wave_destroy(wave);*/
-
+    //FIN SECUENCIAL
     
     
 
