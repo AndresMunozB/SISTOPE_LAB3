@@ -13,7 +13,7 @@
 //VARIABLES GLOBALES
 Thread_t** threads = NULL;
 int* threads_id = NULL;
-Wave* wave = NULL;
+Wave_t* wave = NULL;
 float pd;
 pthread_mutex_t mutex;
 //FIN VARIABLES GLOBALES
@@ -75,7 +75,7 @@ int main(){
 
     //LIBERAR MEMORIA
     wave_destroy(wave);
-    threads_destroy(threads,THREADS);
+    threads_destroy(threads);
     free(threads_id);
     //FIN LIBERAR MEMORIA
 

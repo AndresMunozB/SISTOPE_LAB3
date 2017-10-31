@@ -2,11 +2,15 @@
 #include <stdlib.h>
 #include "funciones.h"
 
-//ENTRADA: Enteros n y m, que representan las filas y columnas respectivamente
-//SALIDA: Puntero a la estructura Matriz
-//Esta función se encarga de crear una nueva matriz e inicializar cada posicion con caracter espacio.
-Wave* wave_create(int n,int m,int t, int h){
-    Wave* wave = (Wave*) malloc(sizeof(Wave));
+
+/*
+ * Funcion wave_create
+ * Funcion que inicializa un puntero de estructura Wave_t.
+ * @param int n:número de filas.int m:número de columnas.int t:número de pasos.int h,numero de hebras.
+ * @return Puntero de estructura Wave_t
+*/
+Wave_t* wave_create(int n,int m,int t, int h){
+    Wave_t* wave = (Wave_t*) malloc(sizeof(Wave_t));
     wave->row = n;
     wave->col = m;
     wave->steps = t;
@@ -15,7 +19,8 @@ Wave* wave_create(int n,int m,int t, int h){
     int i,j,k;
     for(i=0;i<t;i++){
         wave->data[i] = (float**) malloc (sizeof(float*)*n);
-        pthread_barrier_init(&wave->barriers[i], NULL, h );
+        pthread_barrier_init(&wave->barriers[i], NULL, h );//Se inicializan las barreras de cada etapa (paso) con la cantidad de hebras que se ejecutaran
+        //Esto sirve para esperar a todas las hebras antes de pasar a la siguiente etapa.
 
         for(j=0;j<n;j++){
             wave->data[i][j] = (float*) malloc(sizeof(float)*m);
@@ -27,10 +32,13 @@ Wave* wave_create(int n,int m,int t, int h){
     return wave;
 }
 
-//ENTRADA: Puntero a la estructura Matriz
-//SALIDA: Void (Nada)
-//Función se encarga de liberar la memoria utilizada por la matriz.
-void wave_destroy(Wave* wave){
+
+/*
+ * Funcion wave_destroy
+ * Funcion que libera la memoria pedida en un puntero de estructura Wave_t inicializado.
+ * @param Wave_t* wave:Puntero a estructura Wave_t que se desea destruir.
+*/
+void wave_destroy(Wave_t* wave){
     int i,j;  
     for(i=0;i<wave->steps;i++){
         pthread_barrier_destroy(&wave->barriers[i]);
@@ -47,10 +55,13 @@ void wave_destroy(Wave* wave){
     free(wave);
 }
 
-//ENTRADA: Puntero a la estructura Matriz
-//SALIDA: Void (Nada)
-//Función al cual le corresponde mostrar los datos de la matriz por consola
-void wave_show(Wave *wave){
+
+/*
+ * Funcion wave_show
+ * Funcion que muestra por consola la estructura Wave_t.
+ * @param Wave_t* wave:Puntero a estructura Wave_t que se desea mostrar.
+*/
+void wave_show(Wave_t *wave){
     int i,j,k;
     for (i=0;i<wave->steps;i++){
         printf("Step:%d\n",i );
@@ -66,29 +77,35 @@ void wave_show(Wave *wave){
     }
 }
 
-
+/*
+ * Funcion threads_init
+ * Funcion que inicializa un arreglo de punteros de estructuras Thread_t.
+ * @param int n:número de filas de la una matriz.int m:número de columnas de una matriz.int int_threads: número de hebras.
+ * @return Arreglo de punteros de estructuras Thread_t.
+*/
 Thread_t** threads_init(int n, int m, int int_threads){
     int casillas = n*m;
     int i,j;
     int positions;
     int modulo = casillas%int_threads;
 
+    //Se pide memoria para el arerglo de Threads_t
     Thread_t** threads = (Thread_t**)malloc(sizeof(Thread_t*)*int_threads+1);
-    threads[int_threads] = NULL;
+    threads[int_threads] = NULL; //Para saber cual es el final del arreglo.
 
     if(modulo == 0){
         positions = casillas/int_threads;
     }else{
         positions = (casillas/int_threads) + 1;
     }
-
+    //Se pide memoria para la maxima cantidad de posiciones en cada hebra.
     for(i = 0; i < int_threads; i++){
         threads[i] = (Thread_t*)malloc(sizeof(Thread_t));
         threads[i]->positions = (Position_t*)malloc(sizeof(Position_t)*positions);
         threads[i]->int_pos = 0;
     }
 
-    
+    //Se añaden las posiciones correspondientes que calcularan cada hebra.
     Position_t pos;
     int counter = 0;
     for(i=1;i<n-1;i++){
@@ -103,15 +120,26 @@ Thread_t** threads_init(int n, int m, int int_threads){
     return threads;
 }
 
-void threads_destroy(Thread_t** threads,int int_threads){
-    int i;
-    for(i = 0; i < int_threads; i++){
+/*
+ * Funcion threads_destroy
+ * Funcion que libera la memoria pedida en un arreglo de punteros de estructuras Thread_t inicializado.
+ * @param Thread_t** threads:Arreglo de punteros de estructuras Thread_t.
+*/
+void threads_destroy(Thread_t** threads){
+
+    int i = 0;
+    while(threads[i] != NULL){
         free(threads[i]);
         free(threads[i]->positions); 
+        i++;
     }
     free(threads);
 }
-
+/*
+ * Funcion threads_show
+ * Funcion que muestra por consola un arreglo de punteros de la estructura Thread_t.
+ * @param Thread_t** threads:Arreglo de punteros de estructuras Thread_t.
+*/
 void threads_show(Thread_t** threads){
     int i = 0; 
     int j;
@@ -127,7 +155,12 @@ void threads_show(Thread_t** threads){
     }
 }
 
-void secuencial(Wave* wave){
+/*
+ * Funcion secuencial
+ * Funcion que se encarga de calcular la ecuacion de Schroedinger de manera secuencial.
+ * @param Wave_t* wave:Puntero a estructura Wave_t a la cual se aplicarán los calculos.
+*/
+void secuencial(Wave_t* wave){
     int i,j,k;
     float c,dt,dd,pd;
     c = 1.0;
@@ -146,8 +179,12 @@ void secuencial(Wave* wave){
 }
 
 
-
-void calculate(Wave* wave,float pd, int i, int j, int k){
+/*
+ * Funcion calculate
+ * Funcion que se encarga de calcular la ecuacion de Schroedinger a una posicion especifica en un paso determinado.
+ * @param Wave_t* wave:Puntero a estructura Wave_t a la cual se aplicará el calculo.float pd:constante. int i:paso int j:fila. int k:columna.
+*/
+void calculate(Wave_t* wave,float pd, int i, int j, int k){
 
     float up,down,right,left,before,before2;
 

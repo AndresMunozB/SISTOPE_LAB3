@@ -19,6 +19,6 @@ typedef struct wave{
     int col;
     int steps;
     pthread_barrier_t *barriers;
-}Wave;
+}Wave_t;
 
 #endif
