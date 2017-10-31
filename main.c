@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "funciones.h"
 
-#define THREADS 10
+#define THREADS 2
 #define N 5
 #define M 5
 #define T 10
@@ -22,16 +22,16 @@ void* function(void* id_ptr){
     int row,col;
     for(i=1;i<wave->steps;i++){
         //pthread_mutex_lock(&mutex);
-        printf("thread:%d,step:%d,pd:%09.4f \n",thread_id,i,pd);
+        //printf("thread:%d,step:%d,pd:%09.4f \n",thread_id,i,pd);
 
         for(j=0;j<threads[thread_id]->int_pos;j++){
             row = threads[thread_id]->positions[j].row;
             col = threads[thread_id]->positions[j].col;
-            printf("pos: %d,%d\n",row,col );
+            //printf("pos: %d,%d\n",row,col );
             calculate(wave,pd,i,row,col);
         }
         //pthread_mutex_unlock(&mutex);
-        pthread_barrier_wait(&wave->barriers[i]);
+      	pthread_barrier_wait(&wave->barriers[i]);
     }
 
 }
@@ -39,19 +39,19 @@ void* function(void* id_ptr){
 int main(){
     
     
+    //pthread_mutex_init(&mutex,NULL);
     
     wave = wave_create(N,M,T,THREADS);
     wave->data[0][NP][MP] = 100.0;
     threads_id = (int*) malloc(sizeof(int)*THREADS);
     threads = threads_init(N,M,THREADS);
-    pthread_mutex_init(&mutex,NULL);
+    threads_show(threads);
     float c,dt,dd;
     c = 1.0;
     dt = 0.1;
     dd = 2.0;
     pd = ((c*c))*((dt/dd)*(dt/dd));
-    printf("pd:%09.4f \n",pd);
-    threads_show(threads);
+    //printf("pd:%09.4f \n",pd);
 
     int i;
     for(i=0;i<THREADS;i++){
@@ -61,13 +61,18 @@ int main(){
     for(i=0;i<THREADS;i++){
         pthread_join(threads[i]->thread,NULL);
     }
+    threads_destroy(threads,THREADS);
     wave_show(wave);
-    
-
-    
-    
     wave_destroy(wave);
     free(threads_id);
+
+    //secuencial 
+    /*wave = wave_create(N,M,T,THREADS);
+    wave->data[0][NP][MP] = 100.0;
+    next(wave);
+    wave_show(wave);
+    wave_destroy(wave);*/
+
     
     
 

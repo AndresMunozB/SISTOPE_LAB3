@@ -110,22 +110,22 @@ void calculate(Wave* wave,float pd, int i, int j, int k){
     }
 }
 
-Thread_t** threads_init(int n, int m, int hebras){
+Thread_t** threads_init(int n, int m, int int_threads){
     int casillas = n*m;
     int i,j;
     int positions;
-    int modulo = casillas%hebras;
+    int modulo = casillas%int_threads;
 
-    Thread_t** threads = (Thread_t**)malloc(sizeof(Thread_t*)*hebras+1);
-    threads[hebras] = NULL;
+    Thread_t** threads = (Thread_t**)malloc(sizeof(Thread_t*)*int_threads+1);
+    threads[int_threads] = NULL;
 
     if(modulo == 0){
-        positions = casillas/hebras;
+        positions = casillas/int_threads;
     }else{
-        positions = (casillas/hebras) + 1;
+        positions = (casillas/int_threads) + 1;
     }
 
-    for(i = 0; i < hebras; i++){
+    for(i = 0; i < int_threads; i++){
         threads[i] = (Thread_t*)malloc(sizeof(Thread_t));
         threads[i]->positions = (Position_t*)malloc(sizeof(Position_t)*positions);
         threads[i]->int_pos = 0;
@@ -138,12 +138,21 @@ Thread_t** threads_init(int n, int m, int hebras){
         for(j=1;j<m-1;j++){
             pos.row = i;
             pos.col = j;
-            threads[counter%hebras]->positions[threads[counter%hebras]->int_pos] = pos;
-            threads[counter%hebras]->int_pos++;
+            threads[counter%int_threads]->positions[threads[counter%int_threads]->int_pos] = pos;
+            threads[counter%int_threads]->int_pos++;
             counter++;
         }
     }
     return threads;
+}
+
+void threads_destroy(Thread_t** threads,int int_threads){
+    int i;
+    for(i = 0; i < int_threads; i++){
+        free(threads[i]);
+        free(threads[i]->positions); 
+    }
+    free(threads);
 }
 
 void threads_show(Thread_t** threads){

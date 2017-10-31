@@ -7,7 +7,8 @@ void wave_destroy(Wave* wave);
 void wave_show(Wave *wave);
 void next(Wave* wave);
 void calculate(Wave* wave,float pd, int i, int j, int k);
-Thread_t** threads_init(int n, int m, int hebras);
+Thread_t** threads_init(int n, int m, int int_threads);
+void threads_destroy(Thread_t** threads,int int_threads);
 void threads_show(Thread_t** threads);
 
 
