@@ -1,0 +1,3 @@
+1.-¿Como guardar Ht en formato binario?
+2.-¿Como hacer las pruebas para el rendimiento computacional?
+3.-¿Que sentido tiene el -T número_de_pasos y el -t iteracion_de_salida?

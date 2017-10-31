@@ -72,6 +72,7 @@ int main(){
     wave_show(wave);
     //FIN ESPERAR THREADS
     //FIN PROCESAR INFORMACION
+    wave_save(wave,"salida.txt");
 
     //LIBERAR MEMORIA
     wave_destroy(wave);

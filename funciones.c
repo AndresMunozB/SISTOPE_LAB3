@@ -77,6 +77,12 @@ void wave_show(Wave_t *wave){
     }
 }
 
+void wave_save(Wave_t* wave,char* file_name){
+    FILE* file = fopen(file_name,"w");
+    fwrite(wave->data[wave->steps-1],sizeof(wave->data[wave->steps-1]),1,file);
+    fclose(file);
+}
+
 /*
  * Funcion threads_init
  * Funcion que inicializa un arreglo de punteros de estructuras Thread_t.
