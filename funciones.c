@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
+#include <unistd.h>
+#include <string.h>
 #include "funciones.h"
 
 
@@ -212,4 +215,85 @@ void calculate(Wave_t* wave,float pd, int i, int j, int k){
         before = wave->data[0][j][k];
         wave->data[1][j][k] = ((pd/2)*(up+right+left+down-(4*before)))+before;
     }
+}
+
+
+int opt_get(int argc, char** argv,int* Nvalue,int* Tvalue,int* Hvalue,char fvalue[300],int* svalue){
+
+    if(argc > 11){
+        printf("Sobran parametros.\n");
+        return 0;
+    }else if(argc < 11){
+        printf("Faltan parametros.\n");
+        return 0;
+    }
+    int c;
+    while ((c = getopt(argc,argv,"N:T:H:f:t:")) != -1){
+        switch(c){
+            case 'N':
+                sscanf(optarg, "%d", Nvalue);
+                break;
+            case 'T':
+                sscanf(optarg, "%d", Tvalue);
+                break;
+            case 'H':
+                sscanf(optarg, "%d", Hvalue);
+                break;
+            case 't':
+                sscanf(optarg, "%d", svalue);
+                break;
+            case 'f':
+                strcpy(fvalue,optarg);
+                break;
+            case '?':
+                if(isprint(optopt)){
+                    printf("Opcion desconocida.\n");   
+                    return 0;
+                }
+                else{ 
+                    printf("Opcion con caracter desconocido\n");
+                    return 0;
+                }
+            default:
+                abort();
+        }
+    }
+    return 1;
+}
+
+//ENTRADA: String que corresponde al nombre del archivo
+//SALIDA: Entero (0 o 1)
+//Esta función se encarga de verificar si el archivo con el nombre ingresado por parámetro existe o no. 
+// Si retorna 0, el archivo no existe y en caso contrario, retorna 1. 
+int fileExists(char* nombreArchivo){
+    FILE* archivo;
+    archivo = fopen(nombreArchivo, "r");
+    if(archivo == NULL)
+        return 0;
+    else
+        return 1;
+}
+
+//ENTRADA: Todos los valores que ingresan por parametro con getopt
+//SALIDA: Entero (0 o 1)
+//Esta función abarca las pequeñas funciones anteriores, donde se verifican si todos los parametros cumplen las condiciones.
+int verifyArguments(int Nvalue, int Tvalue, int Hvalue, char* fvalue, int tvalue){
+   /*if(fileExists(fvalue) == 0){
+        printf("ERROR: Archivo no encontrado.\n");
+        return 0;
+    }else */if(Nvalue <= 2){
+        printf("ERROR: El tamanio de la matriz debe ser mayor de 2x2\n");
+        return 0;
+    }else if(Tvalue <= 0){
+        printf("ERROR: Cantidad de pasos debe ser mayor que 0\n");
+        return 0;
+    }else if(Hvalue <= 0){
+        printf("ERROR: Cantidad de hebras debe ser mayor que 0\n");
+        return 0;
+    }/*else if(mvalue <= 0){
+        printf("ERROR: Largo de matriz debe ser mayor que 0\n");
+        return 0;
+    }*/ //que es iteracion de salida
+    else 
+        return 1;
 }

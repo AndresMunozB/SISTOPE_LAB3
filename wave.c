@@ -34,23 +34,36 @@ void* function(void* id_ptr){
     pthread_exit (NULL);
 }
 
-int main(){
+int main(int argc, char** argv){
     
     //VALIDAR ENTRADA
-
+     /*     -N tamano_grilla
+        -T número_de_pasos 
+        -H número_de_hebras
+        -f archivo_de_salida 
+        -t iteracion_de_salida
+*/
+    int Nvalue, Tvalue, Hvalue, svalue;
+    char fvalue[300];
+    if(!opt_get( argc, argv, &Nvalue,&Tvalue,&Hvalue,fvalue,&svalue))
+        return 0;  
+   
+    if(verifyArguments(Nvalue,Tvalue,Hvalue,fvalue,svalue) == 0) 
+        return 0;
     //FIN VALIDAR ENTRADA
 
 
     //PEDIR MEMORIA
-    wave = wave_create(N,M,T,THREADS);
-    threads = threads_init(N,M,THREADS);
-    threads_id = (int*) malloc(sizeof(int)*THREADS);
+    wave = wave_create(Nvalue,Nvalue,Tvalue,Hvalue);
+    threads = threads_init(Nvalue,Nvalue,Hvalue);
+    threads_id = (int*) malloc(sizeof(int)*Hvalue);
     //FIN PEDIR MEMORIA
-
 
     //PROCESAR INFORMACION
     threads_show(threads);
     wave->data[0][NP][MP] = 100.0;
+
+    
     int i;
     float c,dt,dd;
     c = 1.0;
@@ -59,14 +72,14 @@ int main(){
     pd = ((c*c))*((dt/dd)*(dt/dd));
 
     //INCIAR THREADS
-    for(i=0;i<THREADS;i++){
+    for(i=0;i<Hvalue;i++){
         threads_id[i]=i;
         pthread_create(&threads[i]->thread,NULL,function,(void*)&threads_id[i]);
     }
     //FIN INICIAR THREADS
 
     //ESPERAR THREADS
-    for(i=0;i<THREADS;i++){
+    for(i=0;i<Hvalue;i++){
         pthread_join(threads[i]->thread,NULL);
     }
     wave_show(wave);
