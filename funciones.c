@@ -80,9 +80,13 @@ void wave_show(Wave_t *wave){
     }
 }
 
-void wave_save(Wave_t* wave,char* file_name){
+void wave_save(Wave_t* wave,char* file_name, int step){
     FILE* file = fopen(file_name,"w");
-    fwrite(wave->data[wave->steps-1],sizeof(wave->data[wave->steps-1]),1,file);
+    int i;
+    for (i=0;i<wave->row;i++){
+        fwrite(wave->data[step-1][i],sizeof(char),wave->col,file);
+    }
+    //fwrite(wave->data[step],sizeof(wave->data[wave->step]),1,file);
     fclose(file);
 }
 
