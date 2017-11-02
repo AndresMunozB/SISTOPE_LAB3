@@ -300,10 +300,10 @@ int verifyArguments(int Nvalue, int Tvalue, int Hvalue, char* fvalue, int tvalue
     }else if(Hvalue <= 0){
         printf("ERROR: Cantidad de hebras debe ser mayor que 0\n");
         return 0;
-    }/*else if(mvalue <= 0){
-        printf("ERROR: Largo de matriz debe ser mayor que 0\n");
+    }else if(tvalue > Tvalue){
+        printf("ERROR: Iteracion de salida debe ser menor o igual que la cantidad de pasos.\n");
         return 0;
-    }*/ //que es iteracion de salida
+    }
     else 
         return 1;
 }
