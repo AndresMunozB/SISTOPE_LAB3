@@ -15,6 +15,6 @@ void calculate(Wave_t* wave,float pd, int i, int j, int k);
 int opt_get(int argc, char** argv,int* Nvalue,int* Tvalue,int* Hvalue,char fvalue[300],int* tvalue);
 int fileExists(char* nombreArchivo);
 int verifyArguments(int Nvalue, int Tvalue, int Hvalue, char* fvalue, int tvalue);
-
+void impulso(Wave_t* wave);
 
 #endif

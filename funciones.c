@@ -32,6 +32,7 @@ Wave_t* wave_create(int n,int m,int t, int h){
             }
         }
     }
+    impulso(wave);
     return wave;
 }
 
@@ -303,4 +304,18 @@ int verifyArguments(int Nvalue, int Tvalue, int Hvalue, char* fvalue, int tvalue
     }*/ //que es iteracion de salida
     else 
         return 1;
+}
+
+void impulso(Wave_t* wave){
+    int position1, position2;
+    int i,j;
+
+    position1 = (wave->row)*0.4;
+    position2 = (wave->row)*0.6;
+
+    for(i = position1; i <= position2; i++){
+        for(j = position1; j <= position2; j++){
+            wave->data[0][i][j] = 20;
+        }
+    }
 }
