@@ -8,7 +8,7 @@
 #define T 10
 #define NP 5
 #define MP 5*/
-
+#define CONS 0.0025
 
 //VARIABLES GLOBALES
 Thread_t** threads = NULL;
@@ -27,7 +27,7 @@ void* function(void* id_ptr){
         for(j=0;j<threads[thread_id]->int_pos;j++){
             row = threads[thread_id]->positions[j].row;
             col = threads[thread_id]->positions[j].col;
-            calculate(wave,pd,i,row,col);
+            calculate(wave,CONS,i,row,col);
         }
       	pthread_barrier_wait(&wave->barriers[i]);
     }
@@ -65,12 +65,10 @@ int main(int argc, char** argv){
     
     
     int i;
-    float c,dt,dd;
-    c = 1.0;
-    dt = 0.1;
-    dd = 2.0;
-    pd = ((c*c))*((dt/dd)*(dt/dd));
+    
 
+    //pd = ((c*c))*((dt/dd)*(dt/dd));
+    printf("%f\n",CONS );
     //INCIAR THREADS
     for(i=0;i<Hvalue;i++){
         threads_id[i]=i;

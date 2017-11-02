@@ -213,7 +213,8 @@ void calculate(Wave_t* wave,float pd, int i, int j, int k){
         left = wave->data[i-1][j][k-1];
         before = wave->data[i-1][j][k];
         before2 = wave->data[i-2][j][k];
-        wave->data[i][j][k] = (pd*(up+right+left+down+before-(4*before)))+(2*before)-before2;
+        //wave->data[i][j][k] = (2*before)-before2+(pd*(up+right+left+down+before-(4*before)));
+        wave->data[i][j][k] = (2*before)-before2+(pd*(right+left+up+down-(4*before)));
     }
     else if(i==1){
         up = wave->data[0][j-1][k];
@@ -221,7 +222,8 @@ void calculate(Wave_t* wave,float pd, int i, int j, int k){
         right = wave->data[0][j][k+1];
         left = wave->data[0][j][k-1];
         before = wave->data[0][j][k];
-        wave->data[1][j][k] = ((pd/2)*(up+right+left+down-(4*before)))+before;
+        //wave->data[1][j][k] = before + ((pd/2)*(up+right+left+down-(4*before)));
+        wave->data[1][j][k] = before + ((pd/2)*(right+left+up+down-(4*before)));
     }
 }
 
