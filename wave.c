@@ -6,8 +6,8 @@
 #define N 5
 #define M 5
 #define T 10
-#define NP 64
-#define MP 64
+#define NP 5
+#define MP 5
 
 
 //VARIABLES GLOBALES
@@ -62,7 +62,7 @@ int main(int argc, char** argv){
     //PROCESAR INFORMACION
     //threads_show(threads);
     wave->data[0][NP][MP] = 100.0;
-
+    
     
     int i;
     float c,dt,dd;
@@ -82,9 +82,10 @@ int main(int argc, char** argv){
     for(i=0;i<Hvalue;i++){
         pthread_join(threads[i]->thread,NULL);
     }
-    //wave_show(wave);
+    wave_show(wave);
     //FIN ESPERAR THREADS
     //FIN PROCESAR INFORMACION
+
     wave_save(wave,"salida.txt",svalue);
 
     //LIBERAR MEMORIA

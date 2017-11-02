@@ -16,11 +16,11 @@ Wave_t* wave_create(int n,int m,int t, int h){
     Wave_t* wave = (Wave_t*) malloc(sizeof(Wave_t));
     wave->row = n;
     wave->col = m;
-    wave->steps = t;
-    wave->data = (float***) malloc (sizeof(float**)*t);
-    wave->barriers = (pthread_barrier_t*) malloc(sizeof(pthread_barrier_t)*t);
+    wave->steps = t+1;
+    wave->data = (float***) malloc (sizeof(float**)*wave->steps);
+    wave->barriers = (pthread_barrier_t*) malloc(sizeof(pthread_barrier_t)*wave->steps);
     int i,j,k;
-    for(i=0;i<t;i++){
+    for(i=0;i<wave->steps;i++){
         wave->data[i] = (float**) malloc (sizeof(float*)*n);
         pthread_barrier_init(&wave->barriers[i], NULL, h );//Se inicializan las barreras de cada etapa (paso) con la cantidad de hebras que se ejecutaran
         //Esto sirve para esperar a todas las hebras antes de pasar a la siguiente etapa.
@@ -84,8 +84,11 @@ void wave_save(Wave_t* wave,char* file_name, int step){
     FILE* file = fopen(file_name,"w");
     int i;
     for (i=0;i<wave->row;i++){
-        fwrite(wave->data[step-1][i],sizeof(char),wave->col,file);
+
+        fwrite(wave->data[step][i],wave->col,sizeof(float),file);
+
     }
+
     //fwrite(wave->data[step],sizeof(wave->data[wave->step]),1,file);
     fclose(file);
 }
