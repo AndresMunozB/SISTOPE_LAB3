@@ -93,6 +93,17 @@ void wave_save(Wave_t* wave,char* file_name, int step){
     //fwrite(wave->data[step],sizeof(wave->data[wave->step]),1,file);
     fclose(file);
 }
+float** matriz_load(char* file_name, int n){
+    FILE* file = fopen(file_name,"r");
+    float** matriz = (float**) malloc (sizeof(float*)*n);
+
+    int i;
+    for (i=0;i<n;i++){
+        matriz[i] = (float*) malloc (sizeof(float*)*n);
+        fread(matriz[i],sizeof(float)*n,1,file);
+    }
+    return matriz;
+}
 
 /*
  * Funcion threads_init

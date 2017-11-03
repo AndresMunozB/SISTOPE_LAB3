@@ -43,6 +43,8 @@ int main(int argc, char** argv){
         -f archivo_de_salida 
         -t iteracion_de_salida
 */
+
+    
     int Nvalue, Tvalue, Hvalue, svalue;
     char fvalue[300];
     if(!opt_get( argc, argv, &Nvalue,&Tvalue,&Hvalue,fvalue,&svalue))
@@ -91,7 +93,19 @@ int main(int argc, char** argv){
     threads_destroy(threads);
     free(threads_id);
     //FIN LIBERAR MEMORIA
+    
 
+
+    /*
+    float** matriz = matriz_load("salida_10_10.raw",10);
+    int j,k;
+    for(j=0;j<10;j++){
+            for(k=0;k<10;k++){
+                printf("%09.4f   ",matriz[j][k]);
+
+            }
+            printf("\n");
+        }*/
 
     /*
     //SECUENCIAL

@@ -17,4 +17,6 @@ int fileExists(char* nombreArchivo);
 int verifyArguments(int Nvalue, int Tvalue, int Hvalue, char* fvalue, int tvalue);
 void impulso(Wave_t* wave);
 
+
+float** matriz_load(char* file_name, int n);
 #endif
