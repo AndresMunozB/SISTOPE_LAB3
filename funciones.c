@@ -326,16 +326,16 @@ void impulso(Wave_t* wave){
     position1 = (wave->row)*0.4;
     position2 = (wave->row)*0.6;
     
-    for(i = position1; i <= position2; i++){
+    /*for(i = position1; i <= position2; i++){
         for(j = position1; j <= position2; j++){
             wave->data[0][i][j] = 20;
         }
-    }
-    /*for (i=1;i<wave->row;i++){
+    }*/
+    for (i=1;i<wave->row;i++){
         for (j=1;j<wave->col;j++){
             if((i >position1) && (i< position2) && (j > position1) && (j < position2 )){
                 wave->data[0][i][j] = 20;
             }
         }
-    }*/
+    }
 }

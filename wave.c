@@ -42,7 +42,13 @@ int main(int argc, char** argv){
         -H número_de_hebras
         -f archivo_de_salida 
         -t iteracion_de_salida
-*/
+    */
+
+    //MIDIENDO TIEMPO
+    /*struct timeval startTime, endTime;
+    unsigned int micros;
+    gettimeofday(&startTime);
+    */
 
     
     int Nvalue, Tvalue, Hvalue, svalue;
@@ -63,15 +69,12 @@ int main(int argc, char** argv){
 
     //PROCESAR INFORMACION
     //threads_show(threads);
-   // wave->data[0][NP][MP] = 100.0;
+    //wave->data[0][NP][MP] = 100.0;
+    //printf("%f\n",CONS );
     
     
-    int i;
-    
-
-    //pd = ((c*c))*((dt/dd)*(dt/dd));
-    printf("%f\n",CONS );
     //INCIAR THREADS
+    int i;
     for(i=0;i<Hvalue;i++){
         threads_id[i]=i;
         pthread_create(&threads[i]->thread,NULL,function,(void*)&threads_id[i]);
@@ -82,7 +85,7 @@ int main(int argc, char** argv){
     for(i=0;i<Hvalue;i++){
         pthread_join(threads[i]->thread,NULL);
     }
-    wave_show(wave);
+    //wave_show(wave); //Motrar todo los pasos
     //FIN ESPERAR THREADS
     //FIN PROCESAR INFORMACION
 
@@ -94,7 +97,6 @@ int main(int argc, char** argv){
     free(threads_id);
     //FIN LIBERAR MEMORIA
     
-
 
     /*
     float** matriz = matriz_load("salida_10_10.raw",10);
@@ -117,6 +119,15 @@ int main(int argc, char** argv){
     wave_destroy(wave);
     //FIN SECUENCIAL
     */
+
+
+    /*
+    //MIDIENDO TIEMPO
+    gettimeofday(&endTime);
+    micros = (endTime.tv_sec - startTime.tv_sec)*1000000 + (endTime.tv_usec - startTime.tv_usec);
+    printf("Elapsed time (us): %u\n", micros);
+    //MIDIENDO TIEMPO */
+
     
 
     return 1;
