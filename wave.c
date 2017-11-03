@@ -93,15 +93,16 @@ int main(int argc, char** argv){
     //FIN LIBERAR MEMORIA
 
 
-
+    /*
     //SECUENCIAL
-    /*wave = wave_create(N,M,T,THREADS);
-    wave->data[0][NP][MP] = 100.0;
-    next(wave);
+    wave = wave_create(Nvalue,Nvalue,Tvalue,Hvalue);
+    //wave->data[0][NP][MP] = 100.0;
+    impulso(wave);
+    secuencial(wave);
     wave_show(wave);
-    wave_destroy(wave);*/
+    wave_destroy(wave);
     //FIN SECUENCIAL
-    
+    */
     
 
     return 1;
