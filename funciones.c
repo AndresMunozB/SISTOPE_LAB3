@@ -312,11 +312,12 @@ int verifyArguments(int Nvalue, int Tvalue, int Hvalue, char* fvalue, int tvalue
         printf("ERROR: Cantidad de hebras debe ser mayor que 0\n");
         return 0;
     }else if(tvalue > Tvalue){
-        printf("ERROR: Iteracion de salida debe ser menor o igual que la cantidad de pasos.\n");
-        return 0;
+        printf("Warning: Iteracion de salida debe ser menor o igual que la cantidad de pasos.\n");
+        //return 0;
     }
     else 
         return 1;
+    return 1;
 }
 
 void impulso(Wave_t* wave){

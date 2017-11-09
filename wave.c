@@ -89,7 +89,17 @@ int main(int argc, char** argv){
     //FIN ESPERAR THREADS
     //FIN PROCESAR INFORMACION
 
-    wave_save(wave,fvalue,svalue);
+/*     -N tamano_grilla
+        -T número_de_pasos 
+        -H número_de_hebras
+        -f archivo_de_salida 
+        -t iteracion_de_salida
+    */
+
+    if (Tvalue >= svalue){
+        wave_save(wave,fvalue,svalue);
+    }
+
 
     //LIBERAR MEMORIA
     wave_destroy(wave);
